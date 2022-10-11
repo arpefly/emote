@@ -1,7 +1,7 @@
 import logging
 import asyncio
 
-from main import bot
+from create_bot import bot
 from aiogram.utils import exceptions
 
 from db import sql_worker
@@ -44,7 +44,7 @@ async def start_broadcaster():
     count = 0
     try:
         for user_id in sql_worker.get_all_users():
-            if await send_message(user_id, 'Hello !'):
+            if await send_message(user_id, 'Как настроение ?'):
                 count += 1
             await asyncio.sleep(.05)  # 20 messages per second (Limit: 30 messages per second)
     finally:
