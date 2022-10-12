@@ -46,6 +46,7 @@ async def start_broadcaster():
         for user_id in sql_worker.get_all_users():
             if await send_message(user_id, 'Как настроение ?'):
                 count += 1
+                print('message sent to', user_id)
             await asyncio.sleep(.05)  # 20 messages per second (Limit: 30 messages per second)
     finally:
         logging.info(f"{count} messages successful sent.")

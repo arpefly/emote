@@ -1,18 +1,16 @@
-from datetime import datetime
-
 from matplotlib import pyplot as plt
 from matplotlib.ticker import MultipleLocator
 from db import sql_worker
 
 
-def make_chart(chat_id: int, timestamp_start: int, timestamp_end: int):
+def make_chart(chat_id: int, timestamp_start: int, timestamp_end: int) -> bool:
     x_values = []
     y_values = []
 
     data = sql_worker.get_marks(chat_id, timestamp_start, timestamp_end)
 
-    if len(data) == 0:
-        return
+    if len(data) < 2:
+        return False
 
     start_date = sql_worker.get_datetime(timestamp_start)
     end_date = sql_worker.get_datetime(timestamp_end)
@@ -36,3 +34,5 @@ def make_chart(chat_id: int, timestamp_start: int, timestamp_end: int):
     ax.grid()
     plt.subplots_adjust(right=0.98, bottom=0.32, left=0.07)
     plt.savefig(f'charts/{chat_id}.png', dpi=200)
+
+    return True

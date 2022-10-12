@@ -1,7 +1,7 @@
 import datetime
 import sqlite3 as sql
 
-base = sql.connect("C:\\Users\\wasd\\Desktop\\db.db")
+base = sql.connect("db.db")
 cur = base.cursor()
 
 
@@ -50,8 +50,8 @@ def get_all_users() -> list:
     :return: list со всеми chat_id в db.db
     """
 
-    users_list = list(cur.execute('SELECT chat_id FROM users').fetchone())
-    return users_list
+    users_list = cur.execute('SELECT chat_id FROM users').fetchall()
+    return [item[0] for item in users_list]
 
 
 def write_mark(chat_id: int, timestamp: float, mark: int, comment: str):

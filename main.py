@@ -10,7 +10,7 @@ import handlers  # Ипорт handlers
 
 
 async def scheduler():
-    aioschedule.every().hour.at(':00').do(broadcast_text.start_broadcaster)
+    aioschedule.every(3).seconds.do(broadcast_text.start_broadcaster)
 
     while True:
         await aioschedule.run_pending()

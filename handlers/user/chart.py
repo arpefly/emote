@@ -18,6 +18,7 @@ async def chart_command(message: types.Message):
     timestamp_start = sql_worker.get_timestamp(start.day, start.month, start.year, start.hour, start.minute, start.second)
     timestamp_end = sql_worker.get_timestamp(end.day, end.month, end.year, end.hour, end.minute, end.second)
 
-    chart_worker.make_chart(message.from_user.id, timestamp_start=timestamp_start, timestamp_end=timestamp_end)
-
-    await bot.send_photo(message.from_user.id, photo=open(f'charts/{message.from_user.id}.png', 'rb'))
+    if chart_worker.make_chart(message.from_user.id, timestamp_start=timestamp_start, timestamp_end=timestamp_end):
+        await bot.send_photo(message.from_user.id, photo=open(f'charts/{message.from_user.id}.png', 'rb'))
+    else:
+        await message.answer('Данных для графика пока нет.')
