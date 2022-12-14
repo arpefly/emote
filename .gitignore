@@ -1,9 +1,2 @@
 .idea/
 venv/
-__pycache__/
-broadcast/__pycache__/
-chart/__pycache__/
-db/__pycache__/
-handlers/user/__pycache__/
-keyboards/__pycache__/
-states/user/__pycache__/
