@@ -23,7 +23,7 @@ def is_user_in_db(chat_id: int) -> bool:
         False: если пользователя нет в db.db
     """
 
-    if cur.execute('SELECT COUNT(chat_id) FROM users WHERE chat_id == ?', (chat_id,)).fetchone()[0] == 1:
+    if cur.execute('SELECT COUNT(chat_id) FROM users WHERE chat_id is ?', (chat_id,)).fetchone()[0] == 1:
         return True
     else:
         return False
@@ -38,7 +38,7 @@ def add_user_to_db(chat_id: int, username: str, fisrt_name: str, last_name: str)
     :param last_name: last_name пользователя
     """
 
-    base.execute('INSERT INTO users VALUES(?, ?, ?, ?)', (chat_id, username, fisrt_name, last_name))
+    base.execute('INSERT INTO users VALUES(?, ?, ?, ?, ?, ?)', (chat_id, username, fisrt_name, last_name, True, 'OK'))
     base.commit()
 
 def get_all_users() -> list:

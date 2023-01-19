@@ -43,8 +43,7 @@ async def start_broadcaster():
 
     try:
         for chat_id in sql_worker.get_users_to_broadcasr():
-            if await send_message(chat_id, 'Как настроение ?'):
-                print('message sent to', chat_id)
+            await send_message(chat_id, 'Как настроение ?')
             await asyncio.sleep(.05)  # 20 messages per second (Limit: 30 messages per second)
     finally:
         pass
