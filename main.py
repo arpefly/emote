@@ -15,7 +15,7 @@ async def scheduler():
     Планировщик рассылки уведомлений
     """
 
-    aioschedule.every(5).seconds.do(broadcast_notifications.start_broadcaster)
+    aioschedule.every(1).hour.at(':00').do(broadcast_notifications.start_broadcaster)
 
     while True:
         await aioschedule.run_pending()
