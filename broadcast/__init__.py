@@ -1,1 +1,1 @@
-from broadcast import broadcast_text
+from broadcast import broadcast_notifications
