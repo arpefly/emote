@@ -1,4 +1,4 @@
-# Emote
+# emote
 
 Telegram бот, ведущий Твой журнал настроения [@emotioncontrolbot](https://t.me/emotioncontrolbot)
 
