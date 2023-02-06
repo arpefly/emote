@@ -28,7 +28,7 @@ def is_user_in_db(chat_id: int) -> bool:
     else:
         return False
 
-def add_user_to_db(chat_id: int, username: str, fisrt_name: str, last_name: str) -> None:
+def add_user_to_db(chat_id: int, username: str, fisrt_name: str, last_name: str, lang_code: str) -> None:
     """
     Добавить пользователя в db.db
 
@@ -36,9 +36,10 @@ def add_user_to_db(chat_id: int, username: str, fisrt_name: str, last_name: str)
     :param username: username пользователя
     :param fisrt_name: fisrt_name пользователя
     :param last_name: last_name пользователя
+    :param lang_code: language_code пользователя
     """
 
-    base.execute('INSERT INTO users VALUES(?, ?, ?, ?, ?, ?)', (chat_id, username, fisrt_name, last_name, True, 'OK'))
+    base.execute('INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?)', (chat_id, username, fisrt_name, last_name, True, 'OK', lang_code))
     base.commit()
 
 def get_all_users() -> list:
@@ -53,7 +54,7 @@ def get_all_users() -> list:
 
 def get_users_to_broadcasr() -> list:
     """
-    Получить всех пользователей, которые не заблокировали бота или не забанены или аккаунт ещё существует
+    Получить всех пользователей, которые не заблокировали бота или не забанены, или аккаунт ещё существует
 
     :return: list с chat_id которым можено отправить уведолмление
     """
@@ -61,7 +62,7 @@ def get_users_to_broadcasr() -> list:
     users_list = cur.execute('SELECT chat_id FROM users WHERE can_send').fetchall()
     return [item[0] for item in users_list]
 
-def write_error(chat_id: int, can_send:bool, error_type: str):
+def write_error(chat_id: int, can_send: bool, error_type: str):
     """
     Записать ошибку из-за которой бот не может отправить сообщение
 
@@ -73,7 +74,7 @@ def write_error(chat_id: int, can_send:bool, error_type: str):
     base.execute('UPDATE users SET can_send = ?, error_type = ? WHERE chat_id is ?', (can_send, error_type, chat_id))
     base.commit()
 
-def is_send_message_possible(chat_id:int) -> bool:
+def is_send_message_possible(chat_id: int) -> bool:
     """
     Может ли бот отправить уведомлене ?
 
@@ -110,7 +111,7 @@ def get_marks(chat_id: int, timestamp_start: int, timestamp_end: int) -> list:
     :param timestamp_end: конец диапазона выборки
     :return: lsit c времеными метками и оценками настроения вида [(timestamp1, mark1), (timestamp2, mark2), ...]
     """
-    marks_lsit = list(cur.execute('SELECT timestamp, mark FROM notes WHERE chat_id == ? and timestamp BETWEEN ? and ?', (chat_id, timestamp_start, timestamp_end)).fetchall())
+    marks_lsit = list(cur.execute('SELECT timestamp, mark FROM notes WHERE chat_id is ? and timestamp BETWEEN ? and ?', (chat_id, timestamp_start, timestamp_end)).fetchall())
     return marks_lsit
 
 def get_timestamp(day, month, year, hour, minute, second):
@@ -118,3 +119,11 @@ def get_timestamp(day, month, year, hour, minute, second):
 
 def get_datetime(timestamp):
     return datetime.datetime.fromtimestamp(timestamp).strftime('%d.%m.%Y %H:%M:%S')
+
+def get_language(chat_id: int) -> str:
+    result = cur.execute('SELECT language FROM users WHERE chat_id == ?', (chat_id,)).fetchone()[0]
+    return result
+
+def set_language(chat_id: int, lang_code: str):
+    base.execute('UPDATE users SET language = ? WHERE chat_id is ?', (lang_code, chat_id))
+    base.commit()

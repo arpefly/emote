@@ -5,6 +5,7 @@ from create_bot import bot
 from aiogram.utils import exceptions
 
 from db import sql_worker
+from localization import dictionary
 
 
 async def send_message(chat_id: int, text: str, disable_notification: bool = True) -> bool:
@@ -43,7 +44,7 @@ async def start_broadcaster():
 
     try:
         for chat_id in sql_worker.get_users_to_broadcasr():
-            await send_message(chat_id, 'Как настроение ?')
+            await send_message(chat_id, dictionary.notification[sql_worker.get_language(chat_id)])
             await asyncio.sleep(.05)  # 20 messages per second (Limit: 30 messages per second)
     finally:
         pass

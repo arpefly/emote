@@ -1,11 +1,9 @@
 from aiogram import types
 
+from db import sql_worker
+from localization import dictionary
+
 
 async def help_command(message: types.Message):
-    await message.answer('Привет 👋\n'
-                         'Я помогу тебе вести журнал настроения.\n\n'
-                         '/start – запустить бота\n'
-                         '/help – показать справочное сообщение\n'
-                         '/chart – построить график настроения\n'
-                         '/names – изменить обращения\n'
-                         '/questions – изменить вопросы')
+    await message.answer(dictionary.help_message[sql_worker.get_language(message.from_user.id)])
+
